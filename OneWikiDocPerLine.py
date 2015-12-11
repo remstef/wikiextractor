@@ -14,6 +14,8 @@ def one_doc_per_line(fin):
     print('reading wiki docs.', file=sys.stderr)
     d, k, l = 0, 0, 0
     doc = ''
+    title = ''
+    id = ''
     for line in fin:
         l += 1
         if l % 10000 == 0:
@@ -24,14 +26,16 @@ def one_doc_per_line(fin):
             # a new doc starts
             # line format: <doc id="2" url="http://simple.wikipedia.org/wiki?curid=2" title="August">
             # TODO: add id!
-            doc = line[line.find('title="')+7:line.rfind('"')] + '\t'
+            title = line[line.find('title="')+7:line.rfind('"')]
+            id = line[line.find('id="')+4:line.find('" ')]
             d += 1
             continue
         if line.startswith('</doc'):
             if len(doc) > 20:
                 k += 1
-                print(doc)
+                print(id + '\t' + title + '\t' + doc[2:])
             doc = ''
+            title = ''
             continue
 
         doc += '\\n' + line.replace('\t', '\\t')
