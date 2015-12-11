@@ -38,7 +38,7 @@ def get_categories(fin):
                 k += 1
                 print('{}:{}\t{}'.format(doc_id, doc_title, '\t'.join(categories)))
             doc_title = ''
-            categories.clear()
+            del categories[:]
             continue
         if line.startswith('[[Category:'):
             cat = line.replace('[[Category:','')
