@@ -15,7 +15,7 @@ supercats = {}
 
 
 def scan_super_categories(f):
-    with bz2.open(f, 'r') if f.endswith('.bz2') else open(f, 'r') as fin:
+    with bz2.BZ2File(f, 'r') if f.endswith('.bz2') else open(f, 'r') as fin:
         print('reading wiki docs.', file=sys.stderr)
         k, l = 0, 0
         categories = []
@@ -51,7 +51,7 @@ def scan_super_categories(f):
 
 
 def get_categories(f):
-    with bz2.open(f, 'r') if f.endswith('.bz2') else open(f, 'r') as fin:
+    with bz2.BZ2File(f, 'r') if f.endswith('.bz2') else open(f, 'r') as fin:
         print('reading wiki docs.', file=sys.stderr)
         k, l = 0, 0
         categories = []
