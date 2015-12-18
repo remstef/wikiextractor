@@ -25,6 +25,7 @@ def get_categories(fin):
             # empty line
             continue
         if line.startswith('<page'):
+            k += 1
             # a new doc starts
             continue
         if line.startswith('<id'):
@@ -34,17 +35,15 @@ def get_categories(fin):
             doc_title = line.replace('<title>', '').replace('</title>', '').strip()
             continue
         if line.startswith('</page'):
-            if categories:
-                k += 1
-                print('{}:{}\t{}\t'.format(doc_id, doc_title, '\t'.join(categories)))
+            print('{}:{}\t{}\t'.format(doc_id, doc_title, '\t'.join(categories)))
             doc_title = ''
             del categories[:]
             continue
         if line.startswith('[[Category:'):
-            cat = line.replace('[[Category:','')
-            cat = cat[:cat.find(']]')].replace('|','\t').strip().replace(' ','_')
+            cat = line.replace('[[Category:', '')
+            cat = cat[:cat.find(']]')].replace('|', '\t').strip().replace(' ', '_')
             categories.append(cat)
-    print('read {} lines, {} docs.'.format(l, k), file=sys.stderr);
+    print('read {} lines, {} docs.'.format(l, k), file=sys.stderr)
 
 
 @click.command()
