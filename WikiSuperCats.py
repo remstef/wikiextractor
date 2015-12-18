@@ -37,7 +37,8 @@ def scan_super_categories(f):
                 continue
             if line.startswith('</page'):
                 if categories and doc_title.lower().startswith('category:'):
-                    supercats[doc_title.find(':')+1:] = categories
+                    cat_name = doc_title[doc_title.find(':')+1]
+                    supercats[cat_name] = categories
                 doc_title = ''
                 categories = []
                 continue
