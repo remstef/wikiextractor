@@ -20,7 +20,7 @@ def scan_super_categories(f):
         k, l = 0, 0
         categories = []
         doc_title = ''
-        for line in fin:
+        for line in fin.readlines():
             l += 1
             if l % 10000 == 0:
                 print('line {}'.format(l),file=sys.stderr)
