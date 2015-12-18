@@ -100,7 +100,7 @@ def resolve_supercats(cats):
 
 @click.command()
 @click.option('-f', '--infile', help='Wikipedia page dump documents.', type=click.String, required=True)
-@click.option('-s', '--supercats', help='Resolve category hierarchy.', required=False, default=False)
+@click.option('-s', '--supercats', help='Resolve category hierarchy.', is_flag=True, required=False, default=False)
 def cli_run(infile, supercats):
     if supercats:
         scan_super_categories(infile)
