@@ -48,7 +48,7 @@ def scan_super_categories(f):
                 for c in cats:
                     categories.append(c.strip().replace(' ', '_'))
 
-    print('read {} lines, {} docs, {} categories.'.format(l, k), file=sys.stderr)
+    print('read {} lines, {} docs, {} categories.'.format(l, k, len(supercats)), file=sys.stderr)
 
 
 def get_categories(f):
