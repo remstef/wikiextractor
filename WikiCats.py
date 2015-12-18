@@ -36,7 +36,7 @@ def get_categories(fin):
         if line.startswith('</page'):
             if categories:
                 k += 1
-                print('{}:{}\t{}'.format(doc_id, doc_title, '\t'.join(categories)))
+                print('{}:{}\t{}\t'.format(doc_id, doc_title, '\t'.join(categories)))
             doc_title = ''
             del categories[:]
             continue
