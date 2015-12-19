@@ -19,8 +19,8 @@ def get_article_ids(fin):
         l += 1
         if l % 10000 == 0:
             print('line {}'.format(l),file=sys.stderr)
-        id = line[:line.find(':')]
-        articles.add(int(id))
+        title = line[line.find(':')+1:line.find('\t')].strip()
+        articles.add(title)
     print('Read {} lines. Found {} article ids.'.format(l, len(articles)), file=sys.stderr)
 
 
@@ -32,8 +32,8 @@ def get_articles(fin):
         if l % 10000 == 0:
             print('line {}'.format(l),file=sys.stderr)
         splits = line.split('\t')
-        id = int(splits[0].strip())
-        if id in articles:
+        title = splits[1].strip()
+        if title in articles:
             print(line)
     print('Read {} lines.'.format(l), file=sys.stderr)
 
