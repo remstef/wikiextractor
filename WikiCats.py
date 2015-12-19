@@ -39,15 +39,19 @@ def get_categories(fin):
             doc_title = ''
             del categories[:]
             continue
-        if line.startswith('[[Category:'):
-            cat = line.replace('[[Category:', '')
-            cat = cat[:cat.find(']]')].replace('|', '\t').strip().replace(' ', '_')
-            categories.append(cat)
+        if '[[Category:' in line:
+            li = line[line.find('[[Category:'):]
+            cat = li.replace('[[Category:', '')
+            cats = cat[:cat.find(']]')].split('|')
+            for c in cats:
+                c_ = c.strip().replace(' ', '_')
+                if c_:
+                    categories.append(c_)
     print('read {} lines, {} docs.'.format(l, k), file=sys.stderr)
 
 
 @click.command()
-@click.option('-f', '--infile', help='Wikipedia page dump documents. Specify "-" to read from stdin.', type=click.File('r'), required=False, default='-')
+@click.option('-i', '--infile', help='Wikipedia page dump documents. Specify "-" to read from stdin.', type=click.File('r'), required=False, default='-')
 def cli_run(infile):
     get_categories(infile)
 

@@ -37,16 +37,19 @@ def scan_super_categories(f):
                 continue
             if line.startswith('</page'):
                 if categories and doc_title.lower().startswith('category:'):
-                    cat_name = doc_title[doc_title.find(':')+1]
+                    cat_name = doc_title[doc_title.find(':')+1:].strip().replace(' ', '_')
                     supercats[cat_name] = categories
                 doc_title = ''
                 categories = []
                 continue
-            if line.startswith('[[Category:'):
-                cat = line.replace('[[Category:', '')
+            if '[[Category:' in line:
+                li = line[line.find('[[Category:'):]
+                cat = li.replace('[[Category:', '')
                 cats = cat[:cat.find(']]')].split('|')
                 for c in cats:
-                    categories.append(c.strip().replace(' ', '_'))
+                    c_ = c.strip().replace(' ', '_')
+                    if c_:
+                        categories.append(c_)
 
     print('read {} lines, {} docs, {} categories.'.format(l, k, len(supercats)), file=sys.stderr)
 
@@ -81,11 +84,14 @@ def get_categories(f):
                 doc_title = ''
                 del categories[:]
                 continue
-            if line.startswith('[[Category:'):
-                cat = line.replace('[[Category:', '')
+            if '[[Category:' in line:
+                li = line[line.find('[[Category:'):]
+                cat = li.replace('[[Category:', '')
                 cats = cat[:cat.find(']]')].split('|')
                 for c in cats:
-                    categories.append(c.strip().replace(' ', '_'))
+                    c_ = c.strip().replace(' ', '_')
+                    if c_:
+                        categories.append(c_)
     print('read {} lines, {} docs.'.format(l, k), file=sys.stderr);
 
 
@@ -95,12 +101,16 @@ def resolve_supercats(cats):
         if cat not in supercats:
             continue
         for supercat in supercats[cat]:
-            if supercat not in cats_and_supercats:
-                cats.extend(supercat)
+            if supercat not in cats_and_supercats and supercat:
+                cats.append(supercat)
+                cats_and_supercats.add(supercat)
+
+
+    return cats_and_supercats
 
 
 @click.command()
-@click.option('-f', '--infile', help='Wikipedia page dump documents.', required=True)
+@click.option('-i', '--infile', help='Wikipedia page dump documents.', required=True)
 @click.option('-s', '--supercats', help='Resolve category hierarchy.', is_flag=True, required=False, default=False)
 def cli_run(infile, supercats):
     if supercats:
