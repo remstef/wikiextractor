@@ -19,7 +19,7 @@ def get_article_ids(fin):
         l += 1
         if l % 10000 == 0:
             print('line {}'.format(l),file=sys.stderr)
-        id = line[:line[0].find(':')]
+        id = line[:line.find(':')]
         articles.add(int(id))
     print('Read {} lines. Found {} article ids.'.format(l, len(articles)), file=sys.stderr)
 
