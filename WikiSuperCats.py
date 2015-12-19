@@ -115,7 +115,9 @@ def resolve_supercats(cats):
 
 
 def resolve_supercats_and_print_result(doc_id, doc_title, categories):
-    print('{}:{}\t{}\t'.format(doc_id, doc_title, '\t'.join(resolve_supercats(categories))))
+    cats_resolved = resolve_supercats(categories)
+    if "Foods" in cats_resolved:
+        print('{}:{}\t{}\t'.format(doc_id, doc_title, '\t'.join(cats_resolved)))
 
 
 @click.command()
