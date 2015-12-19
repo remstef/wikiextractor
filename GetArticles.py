@@ -34,7 +34,7 @@ def get_articles(fin):
         splits = line.split('\t')
         title = splits[1].strip()
         if title in articles:
-            print(line)
+            print(line, end='')
     print('Read {} lines.'.format(l), file=sys.stderr)
 
 
