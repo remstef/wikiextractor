@@ -10,7 +10,16 @@ import click
 from signal import signal, SIGPIPE, SIG_DFL; signal(SIGPIPE, SIG_DFL)
 
 
-def get_categories(fin):
+category_languages = {
+    'en' : 'Category',
+    'nl' : 'Categorie',
+    'it' : 'Categoria',
+    'fr' : 'Catégorie',
+    'de' : 'Kategorie'
+}
+
+
+def get_categories(fin, category_in_language):
     print('reading wiki docs.', file=sys.stderr)
     k, l = 0, 0
     categories = []
@@ -39,9 +48,9 @@ def get_categories(fin):
             doc_title = ''
             del categories[:]
             continue
-        if '[[Category:' in line:
-            li = line[line.find('[[Category:'):]
-            cat = li.replace('[[Category:', '')
+        if '[[{}:'.format(category_in_language) in line:
+            li = line[line.find('[[{}:'.format(category_in_language)):]
+            cat = li.replace('[[{}:'.format(category_in_language), '')
             cats = cat[:cat.find(']]')].split('|')
             for c in cats:
                 c_ = c.strip().replace(' ', '_')
@@ -52,8 +61,13 @@ def get_categories(fin):
 
 @click.command()
 @click.option('-i', '--infile', help='Wikipedia page dump documents. Specify "-" to read from stdin.', type=click.File('r'), required=False, default='-')
-def cli_run(infile):
-    get_categories(infile)
+@click.option('-l', '--language', help='Wikipedia dump language. (Default: en)', required=False, default='en')
+def cli_run(infile, language):
+    if language not in category_languages:
+        print("Unkown language '{}'. Specify one of {}.".format(language, category_languages.keys()))
+        exit(1)
+    category_in_language = category_languages.get(language)
+    get_categories(infile, category_in_language)
 
 
 if __name__ == '__main__':
